@@ -1093,6 +1093,14 @@
 
                 dreams.unshift(dream);
                 localStorage.setItem('dreams', JSON.stringify(dreams));
+
+                // Track dream saves and show interstitial every 3rd save
+        let dreamSaveCount = parseInt(localStorage.getItem('dreamSaveCount') || '0');
+        dreamSaveCount++;
+        localStorage.setItem('dreamSaveCount', dreamSaveCount.toString());
+        if (dreamSaveCount % 3 === 0) {
+            showInterstitialAd();
+        }
                 
         // Step 4: Show Interstitial Ad after dream logging
         // AdMob Interstitial Ad will be shown here
