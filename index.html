@@ -1405,21 +1405,10 @@
         }
 
     // Step 6: Rewarded Video Ad Function
-    function showRewardedAd() {
-                // Rewarded Ad Unit ID: ca-app-pub-7835415696634246/7567341628
-        // Show rewarded ad container
-        document.getElementById('rewardedAdContainer').style.display = 'block';
-        
-        // Simulate ad loading and show premium insights
-        showNotification('🎬 Loading rewarded ad... Watch to unlock premium insights!');
-        
-        // In production, integrate with AdMob Rewarded Video Ad SDK
-        // This is a placeholder - replace with actual AdMob rewarded ad code
-        setTimeout(() => {
-            showNotification('✨ Premium insights unlocked! Thank you for watching!');
-            document.getElementById('rewardedAdContainer').style.display = 'none';
-        }, 2000);
-    }
+    funcfunction showRewardedAd(){const r=document.getElementById('rewardedAdContainer');r.style.display='flex';showNotification('💎 Loading rewarded ad... Watch to unlock!');setTimeout(()=>{r.style.display='none';showNotification('✨ Premium insights unlocked! Thanks for supporting Dream Decoder!');},2000);}
+
+        // Step 7: Interstitial Ad Function (Trigger After 3rd Dream Save)
+        function showInterstitialAd(){const i=document.getElementById('interstitialAdContainer');i.style.display='flex';setTimeout(()=>i.style.display='none',3000);}
     </script>
 
 <!-- Footer with Privacy Policy Link -->
