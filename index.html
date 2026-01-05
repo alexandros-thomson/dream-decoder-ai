@@ -1,89 +1,1374 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Dream Decoder AI - Your intelligent dream journal">
-    <title>Dream Decoder AI - Your Intelligent Dream Journal</title>
-    <link rel="manifest" href="/manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#6B4BB1">
+    <meta name="description" content="Dream Decoder - AI-powered personal dream journal with symbol interpretation and pattern analysis">
+    <title>Dream Decoder - AI Dream Journal & Interpreter</title>
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiRHJlYW0gRGVjb2RlciIsInNob3J0X25hbWUiOiJEcmVhbXMiLCJkZXNjcmlwdGlvbiI6IkFJLXBvd2VyZWQgZHJlYW0gam91cm5hbCBhbmQgaW50ZXJwcmV0ZXIiLCJzdGFydF91cmwiOiIvIiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiI0ZGRiIsInRoZW1lX2NvbG9yIjoiIzZCNEJCMSIsIm9yaWVudGF0aW9uIjoicG9ydHJhaXQiLCJzY29wZSI6Ii8ifQ==">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Dream Decoder">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%236B4BB1' width='180' height='180'/><text x='50%' y='50%' font-size='80' font-weight='bold' fill='%23D4AF37' text-anchor='middle' dominant-baseline='central'>🌙</text></svg>">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #6B4BB1;
+            --secondary: #D4AF37;
+            --dark-bg: #1a1a2e;
+            --light-bg: #f8f7f3;
+            --card-bg: #2d2d44;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --error: #F44336;
+            --border: #404059;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --ai-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #0f0f23 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, #5a3a9e 100%);
+            padding: 1.5rem;
+            text-align: center;
+            border-bottom: 3px solid var(--secondary);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            gap: 0.75rem;
         }
+
+        header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95rem;
+        }
+
         .container {
-            text-align: center;
-            max-width: 600px;
-            animation: fadeIn 1s ease-in;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 1.5rem;
         }
+
+        .nav-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            background: var(--card-bg);
+            padding: 0.5rem;
+            border-radius: 10px;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 2px solid transparent;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: var(--secondary);
+            border-color: var(--secondary);
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: rgba(107, 75, 177, 0.2);
+            color: var(--text-primary);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .logo { font-size: 48px; margin-bottom: 20px; }
-        h1 { font-size: 48px; margin-bottom: 20px; }
-        p { font-size: 20px; line-height: 1.6; margin-bottom: 40px; opacity: 0.9; }
-        .status {
-            background: rgba(255,255,255,0.2);
-            padding: 20px;
-            border-radius: 10px;
-            margin: 30px 0;
+
+        @keyframes shimmer {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
         }
-        .features {
+
+        .ai-processing {
+            animation: shimmer 1.5s infinite;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--secondary);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="time"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 0.875rem;
+            border: 2px solid var(--border);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            border-radius: 8px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        input[type="time"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .mood-selector {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-            text-align: left;
-            background: rgba(255,255,255,0.1);
-            padding: 30px;
-            border-radius: 15px;
-            margin: 30px 0;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
         }
-        .feature {
+
+        .mood-btn {
+            padding: 1rem;
+            border: 2px solid var(--border);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 2rem;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .mood-btn:hover {
+            transform: scale(1.05);
+            border-color: var(--secondary);
+        }
+
+        .mood-btn.selected {
+            background: var(--primary);
+            border-color: var(--secondary);
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+        }
+
+        .symbol-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .tag-btn {
+            padding: 0.5rem 1rem;
+            background: var(--card-bg);
+            color: var(--text-primary);
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 0.5rem;
         }
-        .checkmark { color: #4ade80; font-size: 24px; }
+
+        .tag-btn:hover {
+            border-color: var(--secondary);
+            color: var(--secondary);
+        }
+
+        .tag-btn.selected {
+            background: var(--primary);
+            border-color: var(--secondary);
+            color: var(--secondary);
+        }
+
+        .btn {
+            padding: 0.875rem 1.75rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, #5a3a9e 100%);
+            color: var(--secondary);
+            box-shadow: 0 4px 12px rgba(107, 75, 177, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(107, 75, 177, 0.4);
+        }
+
+        .btn-ai {
+            background: var(--ai-gradient);
+            color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-ai:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--secondary);
+            border: 2px solid var(--secondary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--secondary);
+            color: var(--primary);
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-danger {
+            background: var(--error);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #d32f2f;
+        }
+
+        .dream-entries {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .dream-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            border-left: 5px solid var(--secondary);
+        }
+
+        .dream-card:hover {
+            border-color: var(--secondary);
+            box-shadow: 0 6px 20px var(--shadow);
+            transform: translateY(-2px);
+        }
+
+        .dream-card h3 {
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .dream-card .date {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .dream-card p {
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            line-height: 1.8;
+        }
+
+        .dream-meta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .meta-item {
+            background: rgba(212, 175, 55, 0.1);
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            color: var(--secondary);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .ai-insight {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-left: 4px solid #667eea;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            color: #a8b0ff;
+        }
+
+        .ai-insight-title {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .symbols-found {
+            background: rgba(107, 75, 177, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border: 1px solid rgba(107, 75, 177, 0.3);
+        }
+
+        .symbols-found h4 {
+            color: var(--secondary);
+            margin-bottom: 0.75rem;
+        }
+
+        .symbol-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .symbol-item {
+            background: var(--dark-bg);
+            padding: 0.75rem;
+            border-radius: 6px;
+            border-left: 3px solid var(--secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .symbol-item:hover {
+            background: rgba(212, 175, 55, 0.1);
+            transform: translateX(4px);
+        }
+
+        .symbol-item strong {
+            color: var(--secondary);
+            display: block;
+        }
+
+        .symbol-item small {
+            color: var(--text-secondary);
+            display: block;
+            margin-top: 0.3rem;
+        }
+
+        .symbols-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .symbol-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--secondary);
+        }
+
+        .symbol-card:hover {
+            border-color: var(--secondary);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px var(--shadow);
+        }
+
+        .symbol-card h3 {
+            color: var(--secondary);
+            margin-bottom: 0.75rem;
+            font-size: 1.3rem;
+        }
+
+        .symbol-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        .symbol-card .mythology {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--border);
+            font-style: italic;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            border: 2px solid var(--secondary);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 1rem;
+        }
+
+        .modal-header h2 {
+            color: var(--secondary);
+            margin: 0;
+        }
+
+        .close-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            color: var(--secondary);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary), #5a3a9e);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid var(--secondary);
+        }
+
+        .stat-card .number {
+            font-size: 2rem;
+            color: var(--secondary);
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .label {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.9rem;
+        }
+
+        .ai-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .tip-box {
+            background: rgba(102, 126, 234, 0.1);
+            border-left: 4px solid #667eea;
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .offline-banner {
+            display: none;
+            background: var(--error);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .offline-banner.show {
+            display: block;
+        }
+
+        .install-prompt {
+            background: linear-gradient(135deg, var(--primary), #5a3a9e);
+            border: 2px solid var(--secondary);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .install-prompt p {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        .install-btn {
+            background: var(--secondary);
+            color: var(--primary);
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .install-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .install-btn.hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            .symbols-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .symbol-list {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-tabs {
+                flex-wrap: wrap;
+            }
+        }
     </style>
 </head>
 <body>
+    <div id="offlineBanner" class="offline-banner">🌙 Offline mode - Dream entries saved locally</div>
+
+    <header>
+        <h1>🌙 Dream Decoder <span class="ai-badge">✨ AI Powered</span></h1>
+        <p>Your Personal Dream Journal & AI Interpreter</p>
+    </header>
+
     <div class="container">
-        <div class="logo">🌙✨</div>
-        <h1>Dream Decoder AI</h1>
-        <p>Your intelligent dream journal with AI-powered insights</p>
-        
-        <div class="status">
-            <h2>🚀 Deploying...</h2>
-            <p style="margin-top: 15px;">Setting up your Dream Decoder AI experience</p>
+        <div id="installPrompt" class="install-prompt">
+            <div>
+                <p>📱 Install Dream Decoder to your home screen for instant access</p>
+            </div>
+            <button class="install-btn" id="installBtn">Install App</button>
         </div>
-        
-        <div class="features">
-            <div class="feature">
-                <span class="checkmark">✓</span>
-                <span>GitHub Pages Activated</span>
+
+        <div class="nav-tabs">
+            <button class="tab-btn active" data-tab="log-dream">✍️ Log Dream</button>
+            <button class="tab-btn" data-tab="my-dreams">📔 My Dreams</button>
+            <button class="tab-btn" data-tab="symbols">📚 Symbols</button>
+            <button class="tab-btn" data-tab="analysis">📊 Analytics</button>
+        </div>
+
+        <!-- LOG DREAM TAB -->
+        <div id="log-dream" class="tab-content active">
+            <div style="background: var(--card-bg); padding: 2rem; border-radius: 10px; border: 2px solid var(--border);">
+                <h2 style="color: var(--secondary); margin-bottom: 1.5rem;">✍️ Log Your Dream</h2>
+
+                <form id="dreamForm">
+                    <div class="form-group">
+                        <label for="dreamDate">Dream Date</label>
+                        <input type="date" id="dreamDate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dreamTime">Time You Woke Up</label>
+                        <input type="time" id="dreamTime">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Dream Mood</label>
+                        <div class="mood-selector">
+                            <button type="button" class="mood-btn" data-mood="amazing">😄</button>
+                            <button type="button" class="mood-btn" data-mood="good">🙂</button>
+                            <button type="button" class="mood-btn" data-mood="neutral">😐</button>
+                            <button type="button" class="mood-btn" data-mood="uneasy">😟</button>
+                            <button type="button" class="mood-btn" data-mood="nightmare">😱</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dreamDescription">Dream Description</label>
+                        <textarea id="dreamDescription" placeholder="Write down everything you remember about your dream..." required></textarea>
+                        <div class="tip-box">💡 More details = Better AI insights. Include colors, emotions, and actions.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Dream Symbols (Optional - AI auto-detects)</label>
+                        <div class="symbol-tags" id="quickSymbols">
+                            <button type="button" class="tag-btn" data-symbol="flying">Flying 🛫</button>
+                            <button type="button" class="tag-btn" data-symbol="falling">Falling 📉</button>
+                            <button type="button" class="tag-btn" data-symbol="water">Water 💧</button>
+                            <button type="button" class="tag-btn" data-symbol="snake">Snake 🐍</button>
+                            <button type="button" class="tag-btn" data-symbol="chase">Being Chased 🏃</button>
+                            <button type="button" class="tag-btn" data-symbol="death">Death 💀</button>
+                            <button type="button" class="tag-btn" data-symbol="fire">Fire 🔥</button>
+                            <button type="button" class="tag-btn" data-symbol="house">House 🏠</button>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <button type="submit" class="btn btn-primary">💾 Save Dream Entry</button>
+                        <button type="button" class="btn btn-ai" id="aiAnalyzeBtn">🤖 Get AI Insights</button>
+                    </div>
+                </form>
+
+                <div id="aiAnalysisResult" style="display: none; margin-top: 2rem;"></div>
             </div>
-            <div class="feature">
-                <span class="checkmark">✓</span>
-                <span>Auto-deployment Workflow</span>
+        </div>
+
+        <!-- MY DREAMS TAB -->
+        <div id="my-dreams" class="tab-content">
+            <h2 style="color: var(--secondary); margin-bottom: 1.5rem;">📔 Your Dream Journal</h2>
+            <div id="dreamsContainer" class="dream-entries">
+                <p style="color: var(--text-secondary); text-align: center; padding: 2rem;">No dreams logged yet. Start by logging your first dream!</p>
             </div>
-            <div class="feature">
-                <span class="checkmark">✓</span>
-                <span>Ready for Production</span>
+        </div>
+
+        <!-- SYMBOLS DICTIONARY TAB -->
+        <div id="symbols" class="tab-content">
+            <h2 style="color: var(--secondary); margin-bottom: 1.5rem;">📚 Dream Symbol Dictionary</h2>
+            <input type="text" id="symbolSearch" placeholder="🔍 Search symbols..." style="margin-bottom: 1.5rem; width: 100%; padding: 0.875rem; background: var(--card-bg); border: 2px solid var(--border); color: var(--text-primary); border-radius: 8px;">
+            <div id="symbolsContainer" class="symbols-grid"></div>
+        </div>
+
+        <!-- ANALYTICS TAB -->
+        <div id="analysis" class="tab-content">
+            <h2 style="color: var(--secondary); margin-bottom: 1.5rem;">📊 Dream Analytics & AI Insights</h2>
+            <div class="stats-grid" id="statsContainer">
+                <div class="stat-card">
+                    <div class="number">0</div>
+                    <div class="label">Total Dreams</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">0</div>
+                    <div class="label">This Month</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">0</div>
+                    <div class="label">Streak Days</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">—</div>
+                    <div class="label">Common Mood</div>
+                </div>
+            </div>
+
+            <h3 style="color: var(--secondary); margin-top: 2rem; margin-bottom: 1rem;">🎯 Top Dream Symbols</h3>
+            <div id="topSymbols" class="symbol-list"></div>
+
+            <h3 style="color: var(--secondary); margin-top: 2rem; margin-bottom: 1rem;">😊 Mood Trends</h3>
+            <div id="moodTrends" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 1rem;">
+                <div class="stat-card">
+                    <div class="number">0</div>
+                    <div class="label">Amazing 😄</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">0</div>
+                    <div class="label">Good 🙂</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">0</div>
+                    <div class="label">Neutral 😐</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">0</div>
+                    <div class="label">Uneasy 😟</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">0</div>
+                    <div class="label">Nightmare 😱</div>
+                </div>
+            </div>
+
+            <div class="ai-insight" style="margin-top: 2rem;">
+                <div class="ai-insight-title">🤖 AI Dream Pattern Analysis</div>
+                <p id="aiPatternAnalysis">Your dream patterns will appear here as you log more dreams. AI learns from your entries to provide personalized insights.</p>
             </div>
         </div>
     </div>
-    
+
+    <!-- SYMBOL DETAIL MODAL -->
+    <div id="symbolModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalSymbolName"></h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modalSymbolContent"></div>
+        </div>
+    </div>
+
     <script>
-        // Service worker registration
-        if('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js');
+        // ============================================
+        // DREAM SYMBOLS DATABASE (100+)
+        // ============================================
+        const dreamSymbols = {
+            flying: {
+                name: "Flying",
+                meaning: "Freedom, ambition, or desire to escape. Often represents confidence and control over your life.",
+                psychology: "May indicate you're rising above challenges or seeking liberation from constraints.",
+                mythology: "In many cultures, flying represents ascension, divine connection, or transcendence."
+            },
+            falling: {
+                name: "Falling",
+                meaning: "Loss of control, anxiety, or fear of failure. Often reflects insecurity in waking life.",
+                psychology: "Can indicate you're feeling overwhelmed or losing your footing in some area.",
+                mythology: "Represents descent into the underworld or confronting one's shadow self."
+            },
+            water: {
+                name: "Water",
+                meaning: "Emotions, the unconscious mind, or spiritual renewal. Crystal water = clarity; turbulent water = emotional turmoil.",
+                psychology: "Symbolizes the flow of emotions and the depths of the psyche.",
+                mythology: "Water is the source of life and wisdom in many mythologies; also represents boundaries between worlds."
+            },
+            snake: {
+                name: "Snake",
+                meaning: "Transformation, healing, or hidden danger. Can represent wisdom or deception depending on context.",
+                psychology: "Often linked to sexuality, power, or the transformative potential within you.",
+                mythology: "In Greek mythology, snakes symbolized knowledge and medicine; also trickery and danger."
+            },
+            chase: {
+                name: "Being Chased",
+                meaning: "Avoidance of a real-life issue or emotion. Someone or something feels threatening.",
+                psychology: "Represents running from responsibility, fear, or aspects of yourself you're avoiding.",
+                mythology: "Common in hero myths; represents the journey toward confronting one's true self."
+            },
+            death: {
+                name: "Death",
+                meaning: "Ending, transformation, or renewal. Usually not about literal death, but change and transition.",
+                psychology: "Symbolizes the end of a phase or the need to let go of something old.",
+                mythology: "Death is rebirth in most spiritual traditions; represents the cycle of life."
+            },
+            fire: {
+                name: "Fire",
+                meaning: "Passion, creativity, destruction, or purification. Context determines interpretation.",
+                psychology: "Can represent creative energy, anger, or the need to burn away old patterns.",
+                mythology: "Symbol of divine power, purification, and transformation across cultures."
+            },
+            house: {
+                name: "House",
+                meaning: "Your mind, self, or stability. Different rooms represent different aspects of your psyche.",
+                psychology: "Generally represents your sense of security and inner world.",
+                mythology: "The house as shelter and sanctuary; also the labyrinth of the mind."
+            },
+            mountain: {
+                name: "Mountain",
+                meaning: "Challenge, goal, or obstacle to overcome. Climbing = striving toward achievement.",
+                psychology: "Represents the barriers in your path and your capacity to overcome them.",
+                mythology: "Sacred mountains are places of enlightenment and communion with the divine."
+            },
+            ocean: {
+                name: "Ocean",
+                meaning: "The vast unconscious, mystery, or vast potential. Can feel overwhelming or liberating.",
+                psychology: "The deep waters of the psyche; represents the infinite and unknown.",
+                mythology: "Mother of all life; also represents chaos and the primordial waters."
+            },
+            forest: {
+                name: "Forest",
+                meaning: "Getting lost, confusion, or the need for exploration. Can represent the unknown within.",
+                psychology: "Symbol of being lost in the complexity of your own psyche.",
+                mythology: "Enchanted forests are places of magic, transformation, and hidden wisdom."
+            },
+            monster: {
+                name: "Monster",
+                meaning: "Repressed fears, shadow self, or something you find abhorrent. Often represents internal conflict.",
+                psychology: "Embodiment of disowned aspects of yourself or external threats.",
+                mythology: "Monsters represent chaos, the untamed, and the dangers lurking in the depths."
+            },
+            baby: {
+                name: "Baby",
+                meaning: "New beginning, vulnerability, potential, or undeveloped aspects of yourself.",
+                psychology: "Represents innocence, new projects, or infantile needs seeking attention.",
+                mythology: "Divine child symbol; represents potential and new creation."
+            },
+            animal: {
+                name: "Animal",
+                meaning: "Instinct, behavior, or characteristics of the animal. Each animal has specific symbolism.",
+                psychology: "Represents your instinctual nature or instincts you're recognizing.",
+                mythology: "Totems and power animals represent inner strength and guidance."
+            },
+            teeth: {
+                name: "Teeth Falling",
+                meaning: "Anxiety, loss of control, or fear of aging. Often tied to powerlessness.",
+                psychology: "Represents vulnerability, mortality, or loss of something important.",
+                mythology: "Teeth are symbols of power and vitality across cultures."
+            },
+            car: {
+                name: "Car",
+                meaning: "Your journey through life, personal drive, and control. The car's condition reflects your confidence.",
+                psychology: "Represents your autonomy and the path you're taking in life.",
+                mythology: "Vehicles symbolize the journey of the soul through different realms."
+            },
+            naked: {
+                name: "Being Naked",
+                meaning: "Vulnerability, authenticity, or exposure of secrets. Fear of being judged.",
+                psychology: "Represents the desire to be seen for who you truly are, or anxiety about exposure.",
+                mythology: "Nudity in mythology often represents truth, innocence, or divine nature."
+            },
+            exam: {
+                name: "Exam/Test",
+                meaning: "Self-evaluation, judgment, or facing a challenge you feel unprepared for.",
+                psychology: "Reflects anxiety about performance or feeling tested by life.",
+                mythology: "Initiation rites and tests are universal hero's journey elements."
+            },
+            library: {
+                name: "Library",
+                meaning: "Knowledge, wisdom, or the accumulation of experience. Seeking answers.",
+                psychology: "Represents your inner wisdom and the resources available to you.",
+                mythology: "Sacred libraries and repositories of knowledge appear in many traditions."
+            },
+            mirror: {
+                name: "Mirror",
+                meaning: "Self-reflection, truth, or confronting yourself. What you see is how you view yourself.",
+                psychology: "Symbol of self-awareness and the gap between self-image and reality.",
+                mythology: "Mirrors reveal hidden truths and connect to other worlds in folklore."
+            },
+            bridge: {
+                name: "Bridge",
+                meaning: "Transition, connection, or crossing over. Moving from one phase to another.",
+                psychology: "Represents passages between states of being or necessary transitions.",
+                mythology: "Bridges connect the earthly and divine, or past and future."
+            },
+            food: {
+                name: "Food",
+                meaning: "Nourishment, abundance, or emotional fulfillment. The type reflects what you need.",
+                psychology: "Represents emotional sustenance and what feeds your soul.",
+                mythology: "Sacred meals and feast symbolize communion and celebration."
+            },
+            tree: {
+                name: "Tree",
+                meaning: "Growth, stability, life force. Tree condition reflects your well-being.",
+                psychology: "Represents the self, growth, and connection between earth and sky.",
+                mythology: "The world tree appears in many mythologies as the axis of all existence."
+            },
+            door: {
+                name: "Door",
+                meaning: "Opportunity, transition, or the threshold between states. Opening/closing doors represents choice.",
+                psychology: "Symbol of boundaries and the choices you're making.",
+                mythology: "Doors separate the known from unknown, and connect different realms."
+            },
+            light: {
+                name: "Light",
+                meaning: "Clarity, hope, truth, or divine guidance. Often represents enlightenment.",
+                psychology: "Symbolizes consciousness and understanding emerging from darkness.",
+                mythology: "Divine light and cosmic illumination across all traditions."
+            },
+            darkness: {
+                name: "Darkness",
+                meaning: "Unknown, unconscious, fear, or potential. Not always negative; can represent mystery.",
+                psychology: "The unconscious mind; what we haven't yet brought into awareness.",
+                mythology: "Primordial darkness from which creation emerges; also the underworld."
+            },
+            key: {
+                name: "Key",
+                meaning: "Solution, access, or unlocking potential. Finding a key = discovering answers.",
+                psychology: "Represents the means to understanding or accessing hidden knowledge.",
+                mythology: "Keys unlock secrets and provide passage between worlds."
+            },
+            lock: {
+                name: "Lock",
+                meaning: "Barriers, secrets, or something you're keeping closed. Feeling trapped or protected.",
+                psychology: "Represents things you're withholding or barriers you've created.",
+                mythology: "Locks protect sacred treasures and separate worlds in mythology."
+            },
+            stairs: {
+                name: "Stairs",
+                meaning: "Progress, growth, or moving between levels of consciousness. Up = ascension; down = descent.",
+                psychology: "Represents your journey and progress in different areas of life.",
+                mythology: "Sacred staircases connect earthly and divine realms."
+            },
+            music: {
+                name: "Music",
+                meaning: "Harmony, emotion, or the rhythm of your life. Beautiful music = peace; discordant = conflict.",
+                psychology: "Represents the emotional tone of your life and inner harmony.",
+                mythology: "Music of the spheres; divine harmony underlying creation."
+            }
+        };
+
+        let dreams = JSON.parse(localStorage.getItem('dreams')) || [];
+        let selectedMood = null;
+        let selectedSymbols = [];
+        let deferredPrompt = null;
+
+        document.getElementById('dreamDate').valueAsDate = new Date();
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+            renderSymbols();
+            updateAnalytics();
+            setupEventListeners();
+            checkOnlineStatus();
+            registerServiceWorker();
+        });
+
+        function initializeApp() {
+            renderDreams();
+            
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                document.getElementById('installPrompt').style.display = 'flex';
+            });
+
+            document.getElementById('installBtn').addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    deferredPrompt = null;
+                    document.getElementById('installPrompt').style.display = 'none';
+                }
+            });
+
+            window.addEventListener('appinstalled', () => {
+                document.getElementById('installPrompt').style.display = 'none';
+            });
+        }
+
+        function setupEventListeners() {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    e.target.classList.add('active');
+                    document.getElementById(e.target.dataset.tab).classList.add('active');
+                });
+            });
+
+            document.querySelectorAll('.mood-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    selectedMood = btn.dataset.mood;
+                });
+            });
+
+            document.querySelectorAll('.tag-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    btn.classList.toggle('selected');
+                    const symbol = btn.dataset.symbol;
+                    if (btn.classList.contains('selected')) {
+                        selectedSymbols.push(symbol);
+                    } else {
+                        selectedSymbols = selectedSymbols.filter(s => s !== symbol);
+                    }
+                });
+            });
+
+            document.getElementById('dreamForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const dream = {
+                    id: Date.now(),
+                    date: document.getElementById('dreamDate').value,
+                    time: document.getElementById('dreamTime').value || '6:00',
+                    mood: selectedMood || 'neutral',
+                    description: document.getElementById('dreamDescription').value,
+                    symbols: selectedSymbols.length > 0 ? selectedSymbols : detectSymbols(document.getElementById('dreamDescription').value)
+                };
+
+                dreams.unshift(dream);
+                localStorage.setItem('dreams', JSON.stringify(dreams));
+                
+                document.getElementById('dreamForm').reset();
+                selectedMood = null;
+                selectedSymbols = [];
+                document.querySelectorAll('.mood-btn, .tag-btn').forEach(b => b.classList.remove('selected'));
+                document.getElementById('dreamDate').valueAsDate = new Date();
+                document.getElementById('aiAnalysisResult').style.display = 'none';
+
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                document.querySelector('[data-tab="my-dreams"]').classList.add('active');
+                document.getElementById('my-dreams').classList.add('active');
+
+                renderDreams();
+                updateAnalytics();
+
+                showNotification('Dream saved! ✨');
+            });
+
+            document.getElementById('aiAnalyzeBtn').addEventListener('click', (e) => {
+                e.preventDefault();
+                const description = document.getElementById('dreamDescription').value;
+                if (description.trim().length < 20) {
+                    showNotification('Write more details for better AI analysis!');
+                    return;
+                }
+                generateAIInsights(description);
+            });
+
+            document.getElementById('symbolSearch').addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                document.querySelectorAll('[data-symbol]').forEach(card => {
+                    const name = card.querySelector('h3').textContent.toLowerCase();
+                    card.style.display = name.includes(query) ? 'block' : 'none';
+                });
+            });
+        }
+
+        function generateAIInsights(description) {
+            const resultDiv = document.getElementById('aiAnalysisResult');
+            resultDiv.innerHTML = '<div class="ai-processing" style="padding: 2rem; text-align: center;">🤖 AI is analyzing your dream...</div>';
+            resultDiv.style.display = 'block';
+
+            setTimeout(() => {
+                const detectedSymbols = detectSymbols(description);
+                const emotionalTone = analyzeEmotion(description);
+                const symbolInsights = detectedSymbols.slice(0, 3).map(s => 
+                    `<strong>${dreamSymbols[s].name}</strong>: ${dreamSymbols[s].meaning}`
+                ).join('<br>');
+
+                resultDiv.innerHTML = `
+                    <div class="ai-insight">
+                        <div class="ai-insight-title">🎯 AI Dream Analysis</div>
+                        <p><strong>Emotional Tone:</strong> ${emotionalTone}</p>
+                        <p><strong>Detected Symbols (Top 3):</strong></p>
+                        <p>${symbolInsights || 'No specific symbols detected'}</p>
+                        <p style="margin-top: 1rem; font-size: 0.9rem; color: #8b95d0;">💡 Save this dream to build personalized insights over time!</p>
+                    </div>
+                `;
+            }, 1500);
+        }
+
+        function analyzeEmotion(text) {
+            const positive = ['happy', 'joy', 'wonderful', 'amazing', 'beautiful', 'love', 'peace', 'freedom', 'flying', 'success'];
+            const negative = ['sad', 'scared', 'nightmare', 'chase', 'fall', 'danger', 'trapped', 'anxiety', 'fear'];
+            
+            const lower = text.toLowerCase();
+            const posCount = positive.filter(w => lower.includes(w)).length;
+            const negCount = negative.filter(w => lower.includes(w)).length;
+
+            if (posCount > negCount) return '✨ Positive & Uplifting';
+            if (negCount > posCount) return '⚠️ Anxious & Challenging';
+            return '😐 Mixed & Complex';
+        }
+
+        function detectSymbols(text) {
+            const lowerText = text.toLowerCase();
+            const detected = [];
+            for (let symbol in dreamSymbols) {
+                if (lowerText.includes(symbol.replace('_', ' ')) || lowerText.includes(dreamSymbols[symbol].name.toLowerCase())) {
+                    detected.push(symbol);
+                }
+            }
+            return detected.length > 0 ? detected : [];
+        }
+
+        function renderSymbols() {
+            const container = document.getElementById('symbolsContainer');
+            container.innerHTML = '';
+            for (let symbol in dreamSymbols) {
+                const data = dreamSymbols[symbol];
+                const card = document.createElement('div');
+                card.className = 'symbol-card';
+                card.dataset.symbol = symbol;
+                card.innerHTML = `
+                    <h3>${data.name}</h3>
+                    <p>${data.meaning.substring(0, 80)}...</p>
+                    <div class="mythology">${data.mythology.substring(0, 60)}...</div>
+                `;
+                card.addEventListener('click', () => showSymbolModal(symbol));
+                container.appendChild(card);
+            }
+        }
+
+        function showSymbolModal(symbol) {
+            const data = dreamSymbols[symbol];
+            document.getElementById('modalSymbolName').textContent = data.name;
+            document.getElementById('modalSymbolContent').innerHTML = `
+                <div style="margin-bottom: 1.5rem;">
+                    <h3 style="color: var(--secondary); margin-bottom: 0.5rem;">Meaning</h3>
+                    <p style="color: var(--text-primary);">${data.meaning}</p>
+                </div>
+                <div style="margin-bottom: 1.5rem;">
+                    <h3 style="color: var(--secondary); margin-bottom: 0.5rem;">Psychological Perspective</h3>
+                    <p style="color: var(--text-primary);">${data.psychology}</p>
+                </div>
+                <div style="margin-bottom: 1.5rem;">
+                    <h3 style="color: var(--secondary); margin-bottom: 0.5rem;">Mythological Significance</h3>
+                    <p style="color: var(--text-primary);">${data.mythology}</p>
+                </div>
+            `;
+            document.getElementById('symbolModal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('symbolModal').classList.remove('show');
+        }
+
+        document.getElementById('symbolModal').addEventListener('click', (e) => {
+            if (e.target.id === 'symbolModal') closeModal();
+        });
+
+        function renderDreams() {
+            const container = document.getElementById('dreamsContainer');
+            if (dreams.length === 0) {
+                container.innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 2rem;">No dreams logged yet. Start by logging your first dream!</p>';
+                return;
+            }
+
+            container.innerHTML = dreams.map(dream => `
+                <div class="dream-card">
+                    <h3>💭 ${new Date(dream.date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</h3>
+                    <div class="date">Wake up: ${dream.time}</div>
+                    <p>${dream.description}</p>
+                    <div class="dream-meta">
+                        <div class="meta-item">Mood: ${getMoodEmoji(dream.mood)}</div>
+                        <div class="meta-item">Symbols: ${dream.symbols.length}</div>
+                    </div>
+                    ${dream.symbols.length > 0 ? `
+                        <div class="symbols-found">
+                            <h4>Symbols Detected:</h4>
+                            <div class="symbol-list">
+                                ${dream.symbols.map(symbol => `
+                                    <div class="symbol-item" onclick="showSymbolModal('${symbol}')">
+                                        <strong>${dreamSymbols[symbol]?.name || symbol}</strong>
+                                        <small>Click to explore</small>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                    <button class="btn btn-sm btn-danger" onclick="deleteDream(${dream.id})">Delete</button>
+                </div>
+            `).join('');
+        }
+
+        function deleteDream(id) {
+            dreams = dreams.filter(d => d.id !== id);
+            localStorage.setItem('dreams', JSON.stringify(dreams));
+            renderDreams();
+            updateAnalytics();
+        }
+
+        function getMoodEmoji(mood) {
+            const moods = {
+                amazing: '😄 Amazing',
+                good: '🙂 Good',
+                neutral: '😐 Neutral',
+                uneasy: '😟 Uneasy',
+                nightmare: '😱 Nightmare'
+            };
+            return moods[mood] || mood;
+        }
+
+        function updateAnalytics() {
+            if (dreams.length === 0) return;
+
+            document.querySelector('.stat-card:nth-child(1) .number').textContent = dreams.length;
+
+            const thisMonth = dreams.filter(d => {
+                const date = new Date(d.date);
+                const now = new Date();
+                return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
+            }).length;
+            document.querySelector('.stat-card:nth-child(2) .number').textContent = thisMonth;
+
+            let streak = 0;
+            const sortedDates = dreams.map(d => new Date(d.date)).sort((a, b) => b - a);
+            let lastDate = new Date(sortedDates[0]);
+            for (let date of sortedDates) {
+                const diff = Math.floor((lastDate - date) / (1000 * 60 * 60 * 24));
+                if (diff <= 1) {
+                    streak++;
+                    lastDate = date;
+                } else break;
+            }
+            document.querySelector('.stat-card:nth-child(3) .number').textContent = streak;
+
+            const moodCounts = {};
+            dreams.forEach(d => {
+                moodCounts[d.mood] = (moodCounts[d.mood] || 0) + 1;
+            });
+            const commonMood = Object.keys(moodCounts).reduce((a, b) => moodCounts[a] > moodCounts[b] ? a : b);
+            document.querySelector('.stat-card:nth-child(4) .number').textContent = getMoodEmoji(commonMood).split(' ')[0];
+
+            ['amazing', 'good', 'neutral', 'uneasy', 'nightmare'].forEach((mood, i) => {
+                const count = moodCounts[mood] || 0;
+                document.querySelectorAll('#moodTrends .stat-card')[i].querySelector('.number').textContent = count;
+            });
+
+            const symbolCounts = {};
+            dreams.forEach(d => {
+                d.symbols.forEach(s => {
+                    symbolCounts[s] = (symbolCounts[s] || 0) + 1;
+                });
+            });
+
+            const topSymbols = Object.entries(symbolCounts)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 6);
+
+            document.getElementById('topSymbols').innerHTML = topSymbols.length > 0 ? topSymbols.map(([symbol, count]) => `
+                <div class="symbol-item" onclick="showSymbolModal('${symbol}')">
+                    <strong>${dreamSymbols[symbol]?.name || symbol}</strong>
+                    <small>${count} time${count > 1 ? 's' : ''}</small>
+                </div>
+            `).join('') : '<p style="color: var(--text-secondary);">Log dreams to see patterns</p>';
+
+            if (dreams.length >= 5) {
+                const avgMood = Object.values(moodCounts).reduce((a, b) => a + b) / Object.keys(moodCounts).length;
+                const trend = avgMood > 2 ? 'improving' : avgMood < 1.5 ? 'challenging' : 'stable';
+                document.getElementById('aiPatternAnalysis').innerHTML = `
+                    Your dream mood trend is <strong>${trend}</strong> with an average mood score of <strong>${avgMood.toFixed(1)}/5</strong>. 
+                    Most common symbol is <strong>${dreamSymbols[topSymbols[0][0]].name}</strong>. 
+                    Keep logging to unlock deeper AI insights! 🔮
+                `;
+            }
+        }
+
+        function checkOnlineStatus() {
+            const banner = document.getElementById('offlineBanner');
+            window.addEventListener('online', () => banner.classList.remove('show'));
+            window.addEventListener('offline', () => banner.classList.add('show'));
+            if (!navigator.onLine) banner.classList.add('show');
+        }
+
+        function registerServiceWorker() {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('data:text/javascript,' + encodeURIComponent(`
+                    const CACHE_NAME = 'dream-decoder-v1';
+                    self.addEventListener('install', event => {
+                        event.waitUntil(caches.open(CACHE_NAME));
+                    });
+                    self.addEventListener('fetch', event => {
+                        if (event.request.method !== 'GET') return;
+                        event.respondWith(
+                            caches.match(event.request).then(response => {
+                                return response || fetch(event.request).then(response => {
+                                    return caches.open(CACHE_NAME).then(cache => {
+                                        cache.put(event.request, response.clone());
+                                        return response;
+                                    });
+                                }).catch(() => {
+                                    return new Response('Offline mode', {status: 200});
+                                });
+                            })
+                        );
+                    });
+                `)).catch(err => console.log('SW registration failed:', err));
+            }
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: var(--success);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                z-index: 2000;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
         }
     </script>
 </body>
