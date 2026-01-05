@@ -730,6 +730,13 @@
                 </form>
 
                 <div id="aiAnalysisResult" style="display: none; margin-top: 2rem;"></div>
+                
+        <!-- Step 6: Rewarded Video Ad for Premium Insights -->
+        <div id="rewardedAdContainer" style="display: none; margin-top: 2rem; padding: 1.5rem; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 10px; text-align: center;">
+            <h3 style="color: white; margin-bottom: 1rem;">🎁 Unlock Premium AI Insights</h3>
+            <p style="color: rgba(255,255,255,0.9); margin-bottom: 1.5rem;">Watch a short video to unlock deeper dream analysis with advanced AI insights!</p>
+            <button class="btn" style="background: #D4AF37; color: #1a1a2e; font-weight: 700; padding: 1rem 2rem;" onclick="showRewardedAd()">🎬 Watch Ad for Premium Insights</button>
+        </div>
             </div>
         </div>
 
@@ -1388,6 +1395,34 @@
             document.body.appendChild(notification);
             setTimeout(() => notification.remove(), 3000);
         }
+
+    // Step 6: Rewarded Video Ad Function
+    function showRewardedAd() {
+        // Show rewarded ad container
+        document.getElementById('rewardedAdContainer').style.display = 'block';
+        
+        // Simulate ad loading and show premium insights
+        showNotification('🎬 Loading rewarded ad... Watch to unlock premium insights!');
+        
+        // In production, integrate with AdMob Rewarded Video Ad SDK
+        // This is a placeholder - replace with actual AdMob rewarded ad code
+        setTimeout(() => {
+            showNotification('✨ Premium insights unlocked! Thank you for watching!');
+            document.getElementById('rewardedAdContainer').style.display = 'none';
+        }, 2000);
+    }
     </script>
+
+<!-- Footer with Privacy Policy Link -->
+<footer style="text-align: center; padding: 2rem 1rem; margin-top: 3rem; border-top: 2px solid var(--border); color: var(--text-secondary);">
+    <p style="margin-bottom: 0.5rem;">🌙 Dream Decoder - Your Personal AI Dream Journal</p>
+    <p style="font-size: 0.9rem;">
+        <a href="privacy.html" style="color: var(--secondary); text-decoration: none; margin: 0 1rem;">🔒 Privacy Policy</a>
+        <span style="margin: 0 1rem;">|</span>
+        <a href="https://github.com/alexandros-thomson/dream-decoder-ai" target="_blank" style="color: var(--secondary); text-decoration: none; margin: 0 1rem;">GitHub</a>
+    </p>
+    <p style="font-size: 0.8rem; margin-top: 1rem; opacity: 0.7;">© 2026 Dream Decoder. All rights reserved.</p>
+</footer>
+
 </body>
 </html>
