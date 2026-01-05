@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dream Decoder AI - Your intelligent dream journal">
+    <title>Dream Decoder AI - Coming Soon</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#667eea">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            padding: 20px;
+        }
+        .container {
+            text-align: center;
+            max-width: 600px;
+            animation: fadeIn 1s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .logo { font-size: 80px; margin-bottom: 20px; }
+        h1 { font-size: 48px; margin-bottom: 20px; }
+        p { font-size: 20px; line-height: 1.6; margin-bottom: 30px; opacity: 0.9; }
+        .status {
+            background: rgba(255,255,255,0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+        .checkmark { color: #4CAF50; font-size: 24px; }
+        ul { list-style: none; padding: 0; }
+        li { padding: 10px; margin: 5px 0; }
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+        .btn:hover { transform: scale(1.05); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🌙</div>
+        <h1>Dream Decoder AI</h1>
+        <p>Your intelligent dream journal with AI-powered insights</p>
+        
+        <div class="status">
+            <h2 style="margin-bottom: 15px;">✅ Deployment Successful!</h2>
+            <ul>
+                <li><span class="checkmark">✓</span> GitHub Pages Active</li>
+                <li><span class="checkmark">✓</span> PWA Manifest Loaded</li>
+                <li><span class="checkmark">✓</span> Auto-Deployment Working</li>
+                <li><span class="checkmark">✓</span> Ready for Production</li>
+            </ul>
+        </div>
+        
+        <p><strong>Next Step:</strong> Replace this file with your full Dream Decoder AI HTML</p>
+        
+        <a href="https://github.com/alexandros-thomson/dream-decoder-ai" class="btn">View Repository</a>
+    </div>
+    
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/dream-decoder-ai/sw.js')
+                    .then(reg => console.log('✅ Service Worker registered'))
+                    .catch(err => console.log('⚠️ SW Error:', err));
+            });
+        }
+    </script>
+</body>
+</html>
